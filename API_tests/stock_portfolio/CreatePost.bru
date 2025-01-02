@@ -1,0 +1,18 @@
+meta {
+  name: CreatePost
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:3001/stocks
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "ticker": "radnoms",
+    "stockStats": "adhalhdwuiha"
+  }
+}
