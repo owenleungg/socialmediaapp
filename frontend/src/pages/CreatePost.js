@@ -13,7 +13,7 @@ function CreatePost() {
 
     // validates form inputs
     const validationSchema = Yup.object().shape({
-        title: Yup.string().required("You msut intput titel"),
+        title: Yup.string().required(),
         postText: Yup.string().required(),
         username:Yup.string().min(3).max(15).required()
     });
