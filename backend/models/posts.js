@@ -1,19 +1,24 @@
-module.exports = (sequelize, Datatypes) => {
+module.exports = (sequelize, DataTypes) => {
 
-    const posts = sequelize.define("Posts", {
+    const Posts = sequelize.define("Posts", {
         title: {
-            type: Datatypes.STRING, 
+            type: DataTypes.STRING, 
             allowNull: false,
         },
         postText: {
-            type: Datatypes.STRING, 
+            type: DataTypes.STRING, 
             allowNull: false,
         },
         username: {
-            type: Datatypes.STRING, 
+            type: DataTypes.STRING, 
             allowNull: false,
         }
     })
 
-    return posts;
+    Posts.associate = (models) => {
+        Posts.hasMany(models.Comments, { 
+           onDelete: "CASCADE",
+        }); 
+    };
+    return Posts;
 }

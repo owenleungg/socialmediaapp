@@ -2,7 +2,7 @@
   "development": {
     "username": "root",
     "password": "password",
-    "database": "stockDB",
+    "database": "postDB",
     "host": "localhost",
     "dialect": "mysql"
   },
