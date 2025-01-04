@@ -3,6 +3,7 @@ const router = express.Router();
 const { Users } = require("../models");
 const bcrypt = require("bcrypt");
 const { sign } = require("jsonwebtoken");
+const { AuthToken, validateToken } = require('../middlewares/AuthMiddleware')
 
 router.post("/", async (req, res) => {
   const { username, password } = req.body;
@@ -29,11 +30,14 @@ router.post("/login", async (request, response) => {
         { username: user.username, id: user.id },
         "importantsecret"
       );
-      return response.json(accessToken);
+      return response.json({token: accessToken, username: username, id: user.id});
     });
   } else {
     return response.json({ error: "User does not exist" });
   }
 });
 
+router.get('/auth', validateToken, (req, res) => {
+  res.json(req.user)
+})
 module.exports = router;
