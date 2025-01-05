@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function Home() {
-  const [listOfposts, setListOfPosts] = useState([]);
+  const [listOfPosts, setListOfPosts] = useState([]);
   let navigate = useNavigate();
 
   useEffect(() => {
@@ -22,14 +22,14 @@ function Home() {
       )
       .then((response) => {
         setListOfPosts(
-          listOfposts.map((post) => {
+          listOfPosts.map((post) => {
             if (post.id === postId) {
-              if (response.data.Liked) {
-                return { ...post, Likes: [...post.Likes, 0] }; // destructure likes array and add a random element(0) to represent a new like
+              if (response.data.liked) {
+                return { ...post, Likes: [...post.Likes, 0] };
               } else {
-                const likesArray = post.Likes
-                likesArray.pop()
-                return { ...post, Likes: likesArray }; 
+                const likesArray = post.Likes;
+                likesArray.pop();
+                return { ...post, Likes: likesArray };
               }
             } else {
               return post;
@@ -38,9 +38,10 @@ function Home() {
         );
       });
   };
+
   return (
     <div>
-      {listOfposts.map((value, key) => {
+      {listOfPosts.map((value, key) => {
         return (
           <div key={key} className="post">
             <div className="title"> {value.title} </div>
@@ -50,13 +51,19 @@ function Home() {
                 navigate(`/post/${value.id}`);
               }}
             >
-              {" "}
-              {value.postText}{" "}
+              {value.postText}
             </div>
             <div className="footer">
-              {" "}
-              {value.username} <button onClick={likeAPost}>Like</button>
-              <label>{value.Likes.length}</label>
+              {value.username}{" "}
+              <button
+                onClick={() => {
+                  likeAPost(value.id);
+                }}
+              >
+                {" "}
+                Like
+              </button>
+              <label> {value.Likes.length}</label>
             </div>
           </div>
         );

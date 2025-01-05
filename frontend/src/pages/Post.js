@@ -18,7 +18,7 @@ function Post() {
     axios.get(`http://localhost:3001/comments/${id}`).then((response) => {
       setComments(response.data);
     });
-  }, [id]);
+  }, []);
 
   const addComment = () => {
     axios
@@ -39,8 +39,9 @@ function Post() {
           console.log(response.data.error);
         } else {
           const commentToAdd = {
-            commentBody: newComment,
+            commentBody: response.data.commentBody,
             username: response.data.username,
+            id: response.data.id,
           };
           setComments([...comments, commentToAdd]);
           setNewComment("");
