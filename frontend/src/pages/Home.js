@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import ThumbUp from "@mui/icons-material/ThumbUp";
+import { AuthContext } from "../helpers/AuthContext";
 
 function Home() {
   const [listOfPosts, setListOfPosts] = useState([]);
   let navigate = useNavigate();
+  const { authState } = useContext(AuthContext);
 
   useEffect(() => {
     axios.get("http://localhost:3001/posts").then((response) => {
@@ -39,6 +42,21 @@ function Home() {
       });
   };
 
+  const deletePost = (postId) => {
+    axios.delete(`http://localhost:3001/posts/${postId}`,
+      {
+        headers: {
+          accessToken: localStorage.getItem("accessToken"),
+        },
+      }).then(() => {
+        setListOfPosts(
+          listOfPosts.filter((val) => {
+            return val.id != postId;
+          })
+        )
+      });
+  };
+
   return (
     <div>
       {listOfPosts.map((value, key) => {
@@ -55,15 +73,25 @@ function Home() {
             </div>
             <div className="footer">
               {value.username}{" "}
-              <button
+              <ThumbUp
                 onClick={() => {
                   likeAPost(value.id);
                 }}
               >
                 {" "}
                 Like
-              </button>
+              </ThumbUp>
               <label> {value.Likes.length}</label>
+              {authState.username === value.username && (
+                <button
+                  onClick={() => {
+                    deletePost(value.id);
+                  }}
+                >
+                  {" "}
+                  Delete Post{" "}
+                </button>
+              )}
             </div>
           </div>
         );
