@@ -36,12 +36,31 @@ function Post() {
       )
       .then((response) => {
         if (response.data.error) {
-          console.log(response.data.error)
+          console.log(response.data.error);
         } else {
-          const commentToAdd = { commentBody: newComment, username: response.data.username};
+          const commentToAdd = {
+            commentBody: newComment,
+            username: response.data.username,
+          };
           setComments([...comments, commentToAdd]);
           setNewComment("");
         }
+      });
+  };
+
+  const deleteComment = (id) => {
+    axios
+      .delete(`http://localhost:3001/comments/${id}`, {
+        headers: {
+          accessToken: localStorage.getItem("accessToken"),
+        },
+      })
+      .then(() => {
+        setComments(
+          comments.filter((val) => {
+            return val.id != id;
+          })
+        );
       });
   };
 
@@ -73,7 +92,16 @@ function Post() {
               <div key={key} className="comment">
                 {comment.commentBody} <br></br>
                 <label> {comment.username}</label>
-                {authState.username === comment.username &&  <button> X </button>}
+                {authState.username === comment.username && (
+                  <button
+                    onClick={() => {
+                      deleteComment(comment.id);
+                    }}
+                  >
+                    {" "}
+                    X{" "}
+                  </button>
+                )}
               </div>
             );
           })}
